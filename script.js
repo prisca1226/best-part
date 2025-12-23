@@ -16,9 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { text: "Where you go I'll follow", delayAfter: 0.5 },
         { text: "No matter how far", delayAfter: 1.5 },
         { text: "If life is a movie", delayAfter: 0.3 },
-        { text: "Oh you're the best part, oh", delayAfter: 3 },
-        { text: "Then You're the best part, ooh", delayAfter: 2 },
-        { text: "You're the best part", delayAfter: 0 } // Tidak ada delay di akhir
+        { text: "Oh you're the best part, oh", delayAfter: 0 },
     ];
     
     // Variabel untuk mengontrol pengetikan
