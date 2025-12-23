@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { text: "You know that I see it", delayAfter: 0.5 },
         { text: "I know you're a star", delayAfter: 0.5 },
         { text: "Where you go I'll follow", delayAfter: 0.3 },
-        { text: "No matter how far", delayAfter: 1 },
+        { text: "No matter how far", delayAfter: 1.5 },
         { text: "If life is a movie", delayAfter: 0.3 },
         { text: "Oh you're the best part, oh", delayAfter: 3 },
         { text: "Then You're the best part, ooh", delayAfter: 2 },
