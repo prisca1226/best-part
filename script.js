@@ -274,6 +274,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Tambahkan indikator delay di UI (opsional)
     const infoElement = document.querySelector('.info');
     const delayInfo = document.createElement('p');
-    delayInfo.innerHTML = '<i class="fas fa-clock"></i> Lirik memiliki delay khusus sesuai timing yang ditentukan';
+    delayInfo.innerHTML = '<i class="fas fa-clock"></i> ini saatnyaaaaa';
     infoElement.appendChild(delayInfo);
 });
