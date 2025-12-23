@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lirik Lagu dengan Hati-Hati</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-heart"></i> Lirik Spesial</h1>
+            <p class="subtitle">Hati-hati kecil pink berserakan dengan lirik yang diketik</p>
+        </header>
+
+        <main>
+            <div class="music-controls">
+                <button id="playBtn" class="btn">
+                    <i class="fas fa-play"></i> Putar Lagu
+                </button>
+                <button id="pauseBtn" class="btn">
+                    <i class="fas fa-pause"></i> Jeda
+                </button>
+                <button id="restartBtn" class="btn">
+                    <i class="fas fa-redo"></i> Ulangi Lirik
+                </button>
+                <div class="volume-control">
+                    <i class="fas fa-volume-up"></i>
+                    <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.5">
+                </div>
+            </div>
+
+            <div class="lyrics-container">
+                <div id="lyrics" class="lyrics"></div>
+            </div>
+
+            <div class="info">
+                <p><i class="fas fa-info-circle"></i> Klik di mana saja untuk menambahkan lebih banyak hati!</p>
+                <p><i class="fas fa-music"></i> Lagu: "Best Part" (Cover)</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Dibuat dengan <i class="fas fa-heart" style="color:#ff4081;"></i> untuk GitHub</p>
+        </footer>
+    </div>
+
+    <audio id="audioPlayer" loop>
+        <source src="lagu.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <canvas id="heartsCanvas"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
