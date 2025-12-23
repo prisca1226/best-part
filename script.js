@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { text: "I just wanna see", delayAfter: 0.5 },
         { text: "I just wanna see how beautiful you are", delayAfter: 2 },
         { text: "You know that I see it", delayAfter: 0.5 },
-        { text: "I know you're a star", delayAfter: 0.5 },
+        { text: "I know you're a star", delayAfter: 1 },
         { text: "Where you go I'll follow", delayAfter: 0.5 },
         { text: "No matter how far", delayAfter: 1.5 },
         { text: "If life is a movie", delayAfter: 0.3 },
