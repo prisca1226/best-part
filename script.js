@@ -7,18 +7,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const restartBtn = document.getElementById('restartBtn');
     const volumeSlider = document.getElementById('volumeSlider');
     
-    // Lirik lagu
+    // Lirik lagu dengan delay kustom (dalam detik)
     const lyrics = [
-        "I just wanna see",
-        "I just wanna see how beautiful you are",
-        "You know that I see it",
-        "I know you're a star",
-        "Where you go I'll follow",
-        "No matter how far",
-        "If life is a movie",
-        "Oh you're the best part, oh",
-        "Then You're the best part, ooh",
-        "You're the best part"
+        { text: "I just wanna see", delayAfter: 0.5 },
+        { text: "I just wanna see how beautiful you are", delayAfter: 2 },
+        { text: "You know that I see it", delayAfter: 0.5 },
+        { text: "I know you're a star", delayAfter: 0.5 },
+        { text: "Where you go I'll follow", delayAfter: 0.3 },
+        { text: "No matter how far", delayAfter: 1 },
+        { text: "If life is a movie", delayAfter: 0.3 },
+        { text: "Oh you're the best part, oh", delayAfter: 3 },
+        { text: "Then You're the best part, ooh", delayAfter: 2 },
+        { text: "You're the best part", delayAfter: 0 } // Tidak ada delay di akhir
     ];
     
     // Variabel untuk mengontrol pengetikan
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentChar = 0;
     let isTyping = false;
     let typingInterval;
+    let currentDelay = 0;
     
     // Setup canvas untuk hati
     const canvas = document.getElementById('heartsCanvas');
@@ -119,13 +120,17 @@ document.addEventListener('DOMContentLoaded', function() {
         requestAnimationFrame(animateHearts);
     }
     
-    // Fungsi untuk mengetik lirik
+    // Fungsi untuk mengetik lirik dengan delay kustom
     function typeLyrics() {
         if (!isTyping) return;
         
         // Jika sudah selesai satu baris
-        if (currentChar >= lyrics[currentLine].length) {
+        if (currentChar >= lyrics[currentLine].text.length) {
             clearInterval(typingInterval);
+            
+            // Ambil delay untuk baris ini (dalam milidetik)
+            currentDelay = lyrics[currentLine].delayAfter * 1000;
+            
             setTimeout(() => {
                 currentLine++;
                 currentChar = 0;
@@ -133,23 +138,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Jika semua lirik sudah diketik
                 if (currentLine >= lyrics.length) {
                     isTyping = false;
-                    lyricsElement.innerHTML = lyrics.join('<br>');
+                    // Tampilkan semua lirik tanpa cursor
+                    let allLyrics = '';
+                    lyrics.forEach((lineObj, index) => {
+                        allLyrics += lineObj.text;
+                        if (index < lyrics.length - 1) {
+                            allLyrics += '<br><br>';
+                        }
+                    });
+                    lyricsElement.innerHTML = allLyrics;
                     return;
                 }
                 
                 // Tambah baris baru
-                lyricsElement.innerHTML += '<br><br>';
+                let existingContent = lyricsElement.innerHTML;
+                // Hapus cursor dari baris sebelumnya
+                existingContent = existingContent.replace('<span class="cursor"></span>', '');
+                lyricsElement.innerHTML = existingContent + '<br><br>';
+                
+                // Mulai mengetik baris berikutnya
                 typingInterval = setInterval(typeLyrics, 100);
-            }, 1000); // Jeda antar baris
+            }, currentDelay);
+            
             return;
         }
         
         // Tambahkan karakter berikutnya
-        const currentText = lyrics[currentLine].substring(0, currentChar + 1);
-        const linesSoFar = lyrics.slice(0, currentLine).join('<br><br>');
+        const currentText = lyrics[currentLine].text.substring(0, currentChar + 1);
         
+        // Bangun semua teks yang sudah diketik sejauh ini
+        let allLinesHTML = '';
+        for (let i = 0; i < currentLine; i++) {
+            allLinesHTML += lyrics[i].text;
+            if (i < currentLine - 1) {
+                allLinesHTML += '<br><br>';
+            }
+        }
+        
+        // Tambahkan baris saat ini dengan cursor
         if (currentLine > 0) {
-            lyricsElement.innerHTML = linesSoFar + '<br><br>' + currentText + '<span class="cursor"></span>';
+            lyricsElement.innerHTML = allLinesHTML + '<br><br>' + currentText + '<span class="cursor"></span>';
         } else {
             lyricsElement.innerHTML = currentText + '<span class="cursor"></span>';
         }
@@ -177,13 +205,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Event listeners untuk kontrol musik
     playBtn.addEventListener('click', function() {
-        audioPlayer.play().catch(e => console.log("Autoplay diblokir: ", e));
+        audioPlayer.play().catch(e => {
+            console.log("Autoplay diblokir: ", e);
+            // Tetap mulai animasi lirik meski audio diblokir
+            startTyping();
+        });
         startTyping();
         playBtn.innerHTML = '<i class="fas fa-play"></i> Sedang Diputar';
     });
     
     pauseBtn.addEventListener('click', function() {
         audioPlayer.pause();
+        // Jeda animasi ketik
+        clearInterval(typingInterval);
+        isTyping = false;
         playBtn.innerHTML = '<i class="fas fa-play"></i> Putar Lagu';
     });
     
@@ -220,6 +255,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Tampilkan informasi delay di konsol
+    console.log("Delay untuk setiap baris lirik:");
+    lyrics.forEach((line, index) => {
+        console.log(`${index + 1}. "${line.text}" - Delay: ${line.delayAfter} detik`);
+    });
+    
     // Inisialisasi
     initHearts(30);
     animateHearts();
@@ -229,6 +270,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Tampilkan pesan jika audio tidak bisa dimainkan
     audioPlayer.addEventListener('error', function() {
-        lyricsElement.innerHTML = "File lagu.mp3 tidak ditemukan. Silakan tambahkan file audio dengan nama 'lagu.mp3' ke folder yang sama.";
+        lyricsElement.innerHTML = "File lagu.mp3 tidak ditemukan. Animasi lirik tetap akan berjalan.<br>Silakan tambahkan file audio dengan nama 'lagu.mp3' ke folder yang sama.";
     });
+    
+    // Tambahkan indikator delay di UI (opsional)
+    const infoElement = document.querySelector('.info');
+    const delayInfo = document.createElement('p');
+    delayInfo.innerHTML = '<i class="fas fa-clock"></i> Lirik memiliki delay khusus sesuai timing yang ditentukan';
+    infoElement.appendChild(delayInfo);
 });
